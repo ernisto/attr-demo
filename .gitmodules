@@ -1,0 +1,3 @@
+[submodule "vendor/attr"]
+	path = vendor/attr
+	url = https://github.com/ernisto/attr
