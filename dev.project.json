@@ -1,0 +1,85 @@
+{
+  "name": "ecs-test",
+  "emitLegacyScripts": false,
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$path": "places/workspace.project.json"
+    },
+    "StarterPlayer": {
+      "$path": "places/player.project.json"
+    },
+    "Lighting": {
+      "$path": "places/lighting.project.json"
+    },
+    "TextChatService": {
+      "$path": "places/chat.project.json"
+    },
+    "Players": {
+      "$properties": {
+        "UseStrafingAnimations": true
+      }
+    },
+    "HttpService": {
+      "$properties": {
+        "HttpEnabled": true
+      }
+    },
+    "SoundService": {
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    },
+    "ReplicatedStorage": {
+      "mantle_uploads": {
+        "$path": "dist/mantle/uploads.toml"
+      },
+      "types": {
+        "$path": "dist/blink/types.luau"
+      },
+      "packages": {
+        "$path": "roblox_packages",
+        "luau": {
+          "$path": "luau_packages"
+        }
+      },
+      "config": {
+        "$path": "config"
+      },
+      "shared": {
+        "$path": "shared"
+      },
+      "assets": {
+        "$path": "dist/asphalt/assets.luau",
+        "models": {
+          "$path": "assets/models"
+        }
+      },
+      "client": {
+        "$path": "client",
+        "net": {
+          "$path": "dist/blink/client"
+        },
+        "ui": {
+          "$path": "ui"
+        }
+      }
+    },
+    "ServerScriptService": {
+      "packages": {
+        "$path": "roblox_server_packages"
+      },
+      "server": {
+        "$path": "server",
+        "net": {
+          "$path": "dist/blink/server"
+        }
+      }
+    },
+    "ServerStorage": {
+      "stories": {
+        "$path": "stories"
+      }
+    }
+  }
+}

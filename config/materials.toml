@@ -1,0 +1,15 @@
+[copper]
+color = [255, 120, 50]
+durability = 5
+
+[iron]
+color = [200, 200, 210]
+durability = 10
+
+[gold]
+color = [255, 180, 80]
+durability = 7
+
+[diamond]
+color = [120, 170, 255]
+durability = 50

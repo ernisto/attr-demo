@@ -1,0 +1,71 @@
+{
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "*.blink": "blink"
+  },
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/*-lock.*": false,
+    "**/*.lock": false,
+    "**/*.lock.*": false,
+    "**/*_packages/**": false,
+    "**/.luaurc": false,
+    "**/.pesde/**": false,
+    "**/dist/**": false,
+    "**/pesde.toml": false,
+    "*.rbxl": false,
+    ".gitattributes": false,
+    ".gitignore": false,
+    ".github": false,
+    ".mantle-state.yml": false,
+    ".vscode": false,
+    "scripts": false,
+    "asphalt.toml": false,
+    "sourcemap.json": false,
+    "mise.toml": false,
+    "stylua.toml": false,
+    "places/*/game.project.json": false,
+    "places/*/game.blink": false,
+    "dev.project.json": false,
+    "dev.blink": false
+  },
+  "files.readonlyInclude": {
+    "**/*-lock.*": true,
+    "**/*.lock": true,
+    "**/*.lock.*": true,
+    "**/*_packages/**": true,
+    "**/.pesde/**": true,
+    "**/dist/**": true,
+    ".mantle-state.yml": true,
+    "sourcemap.json": true
+  },
+  "luau-lsp.bytecode.vectorCtor": "new",
+  "luau-lsp.bytecode.vectorLib": "Vector3",
+  "luau-lsp.bytecode.vectorType": "Vector3",
+  "luau-lsp.completion.imports.ignoreGlobs": [
+    "**/.pesde/**"
+  ],
+  "luau-lsp.completion.imports.requireStyle": "alwaysAbsolute",
+  "luau-lsp.completion.imports.stringRequires.enabled": false,
+  "luau-lsp.diagnostics.strictDatamodelTypes": true,
+  "luau-lsp.diagnostics.workspace": true,
+  "luau-lsp.fflags.enableNewSolver": false,
+  "luau-lsp.ignoreGlobs": [
+    "**/dist/**",
+    "**/.pesde/**",
+    "**/*_packages/**"
+  ],
+  "luau-lsp.platform.type": "roblox",
+  "luau-lsp.sourcemap.includeNonScripts": true,
+  "luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
+  "luau-lsp.types.robloxSecurityLevel": "LocalUserSecurity",
+  "stylua.targetReleaseVersion": "latest",
+  "yaml.schemas": {
+    "https://mantledeploy.vercel.app/schemas/v0.11.18/schema.json": [
+      "mantle.yml"
+    ]
+  },
+  "evenBetterToml.schema.associations": {
+    "**/pesde.toml": "https://raw.githubusercontent.com/znotfireman/schemas/refs/heads/main/schemas/pesde.json"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "name": "game-template [match]",
+  "emitLegacyScripts": false,
+  "globIgnorePaths": [
+    "**/*.spec.lua",
+    "**/*.spec.luau",
+    "**/*.story.lua",
+    "**/*.story.luau",
+    "**/*.bench.lua",
+    "**/*.bench.luau"
+  ],
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$path": "../../places/workspace.project.json"
+    },
+    "StarterPlayer": {
+      "$path": "../../places/player.project.json"
+    },
+    "Lighting": {
+      "$path": "../../places/lighting.project.json"
+    },
+    "TextChatService": {
+      "$path": "../../places/chat.project.json"
+    },
+    "Teams": {
+      "$path": "../../places/match/teams.project.json"
+    },
+    "Players": {
+      "$properties": {
+        "UseStrafingAnimations": true
+      }
+    },
+    "HttpService": {
+      "$properties": {
+        "HttpEnabled": true
+      }
+    },
+    "SoundService": {
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    },
+    "ReplicatedStorage": {
+      "mantle_uploads": {
+        "$path": "../../dist/mantle/uploads.toml"
+      },
+      "types": {
+        "$path": "../../dist/types.luau"
+      },
+      "packages": {
+        "$path": "../../roblox_packages"
+      },
+      "config": {
+        "$path": "../../config"
+      },
+      "shared": {
+        "$path": "../../shared"
+      },
+      "assets": {
+        "$path": "../../dist/asphalt/assets.luau",
+        "models": {
+          "$path": "../../assets/models"
+        }
+      },
+      "client": {
+        "$path": "../../client",
+        "net": {
+          "$path": "../../dist/remotes/client"
+        },
+        "match": {
+          "$path": "client"
+        }
+      }
+    },
+    "ServerScriptService": {
+      "packages": {
+        "$path": "../../roblox_server_packages"
+      },
+      "server": {
+        "$path": "../../server",
+        "net": {
+          "$path": "../../dist/remotes/server"
+        },
+        "match": {
+          "$path": "server"
+        }
+      }
+    }
+  }
+}

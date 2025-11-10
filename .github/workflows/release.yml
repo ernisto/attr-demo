@@ -1,0 +1,66 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, next]
+  pull_request:
+    branches: [main, next]
+
+jobs:
+  check:
+    uses: ./.github/workflows/check.yml
+    secrets: inherit
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [check]
+    steps:
+      - name: Checkout git files
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Config Git user
+        run: |
+          git config user.name "github-actions [bot]"
+          git config user.email "github-actions-bot@users.noreply.github.com"
+
+      - name: Setup rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pesde
+        uses: axiom-co/setup-pesde@b690699ace34169731b6b2a1c93b2008472038a7 # temp until my pr get merged
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # cache: true
+
+      - name: Install packages
+        run: pesde install --prod
+        timeout-minutes: 1
+
+      - run: chmod +x ./scripts/deploy.sh ./scripts/release-build.sh
+        env:
+          ASPHALT_API_KEY: ${{ secrets.MANTLE_OPEN_CLOUD_API_KEY }}
+
+      - name: Build places
+        run: ./scripts/deploy.sh
+        env:
+          # MANTLE_AWS_SECRET_ACCESS_KEY: ${{ secrets.MANTLE_AWS_SECRET_ACCESS_KEY }}
+          # MANTLE_AWS_ACCESS_KEY_ID: ${{ secrets.MANTLE_AWS_ACCESS_KEY_ID }}
+          MANTLE_OPEN_CLOUD_API_KEY: ${{ secrets.MANTLE_OPEN_CLOUD_API_KEY }}
+          ASPHALT_API_KEY: ${{ secrets.MANTLE_OPEN_CLOUD_API_KEY }}
+          ROBLOSECURITY: ${{ secrets.ASPHALT_COOKIE }}
+
+      - name: Commit states
+        run: |
+          git add .mantle-state.yml asphalt.lock.toml
+          git commit -m "chore: update log file [skip ci]"
+          git push origin HEAD:${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

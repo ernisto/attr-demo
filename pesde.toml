@@ -1,0 +1,57 @@
+name = "ernisto/game"
+version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/ernisto/game"
+authors = ["ernisto <joaovitordesouza707@gmail.com>"]
+includes = ["pesde.toml", "README.md", "LICENSE", "docs/**/*.md"]
+
+workspace_members = [
+    "vendor/attr/pkgs/*",
+    "vendor/attr/pkgs/attr-sync/server",
+    "vendor/attr/pkgs/attr-sync/client",
+    "vendor/attr/pkgs/attr-sync/shared"
+] 
+
+[place]
+server = "game.ServerScriptService.packages"
+shared = "game.ReplicatedStorage.packages"
+
+[target]
+environment = "roblox"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+[wally_indices]
+default = "https://github.com/UpliftGames/wally-index"
+
+[scripts]
+roblox_sync_config_generator = ".pesde/scripts/roblox_sync_config_generator.luau"
+sourcemap_generator = ".pesde/scripts/sourcemap_generator.luau"
+
+[engines]
+pesde = "^0.7.1"
+lune = "^0.10.4"
+
+[dev_dependencies]
+uilabs = { wally = "pepeeltoro41/ui-labs", version = "^2.3.8" }
+
+[dependencies]
+attr_sync_client = { workspace = "ernisto/attr_sync_client", target = "luau" }
+attr_sync = { workspace = "ernisto/attr_sync", target = "luau" }
+attr = { workspace = "ernisto/attr", target = "luau" }
+
+vide = { repo = "https://github.com/ernisto/vide", rev = "92f6199d2a077d2ad4a36e6e08715fc5f2a02732" }
+spr = { repo = "https://github.com/ernisto/spr", rev = "e5e3b67978f2913583848faf03aff81ad88b0dfb" }
+promise = { wally = "lukadev-0/typed-promise", version = "^4.0.2" }
+rng = { wally = "ernisto/rng", version = "^1.0.0-rc.3" }
+ray = { wally = "ernisto/ray", version = "^0.1.2" }
+
+# server
+attr_sync_server = { workspace = "ernisto/attr_sync_server", target = "luau" }
+attr_save = { workspace = "ernisto/attr_save", target = "luau" }
+profile_store = { wally = "lm-loleris/profilestore", version = "^1.0.2" }
+
+# ci
+scripts = { name = "pesde/scripts_rojo", version = "^0.2.0", target = "lune" }
+rojo = { name = "pesde/rojo", version = "^7.6.0", target = "lune" }

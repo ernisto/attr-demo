@@ -1,0 +1,20 @@
+function pickup_item {
+    yield: Promise,
+    data: u32,
+}
+function drop_item {
+    yield: Promise,
+    data: u32,
+}
+function place_item {
+    yield: Promise,
+    data: (u32, Instance(BasePart), CFrame)
+}
+function hit_block {
+    yield: Promise,
+    data: u32
+}
+function handle_item {
+    yield: Promise,
+    data: u32
+}

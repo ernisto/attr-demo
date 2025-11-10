@@ -1,0 +1,12 @@
+-- these can be ignored if you are using the studio plugin
+option ClientOutput = '../../dist/remotes/client/init.luau'
+option ServerOutput = '../../dist/remotes/server/init.luau'
+option TypesOutput = '../../dist/types.luau'
+
+option PromiseLibrary = 'ReplicatedStorage.packages.promise'
+option WriteValidations = true
+option SyncValidation = false
+option Casing = Snake
+
+import '../../remotes/init' as game
+import 'remotes/init' as lobby

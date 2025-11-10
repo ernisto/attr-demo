@@ -1,0 +1,72 @@
+name: Check
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    branches-ignore: [main, next] # already executed by release
+  push:
+    branches-ignore: [main, next] # already executed by release
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your Git repo
+        uses: actions/checkout@v4
+
+      - name: Check Format
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: 2.1.0
+          args: --config-path stylua.toml --check client server shared stories
+
+  lint-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your git repo
+        uses: actions/checkout@v4
+
+      - name: Setup rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # cache: true
+
+      - name: Setup pesde
+        uses: axiom-co/setup-pesde@b690699ace34169731b6b2a1c93b2008472038a7 # temp until my pr get merged
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # cache: true
+
+      - name: Install packages
+        run: pesde install
+        timeout-minutes: 1
+
+      - name: Build blink
+        run: blink dev --yes
+
+      - name: Build Asphalt
+        run: asphalt sync --dry-run
+
+      - name: Generate sourcemap
+        run: rojo sourcemap dev.project.json -o sourcemap.json
+
+      - name: Download roblox definitions file
+        run: curl -L "https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/refs/heads/main/scripts/globalTypes.d.luau" -o globalTypes.d.luau
+
+      - name: Lint
+        run: >
+          luau-lsp analyze
+          --platform roblox
+          --base-luaurc .luaurc
+          --defs globalTypes.d.luau
+          --sourcemap sourcemap.json
+          --ignore **/dist/**
+          --ignore **/*_packages/**
+          client server shared stories

@@ -1,0 +1,9 @@
+{
+    "name": "workspace",
+    "tree": {
+        "$className": "Workspace",
+        "Baseplate": {
+            "$path": "../assets/models/baseplate.rbxm"
+        }
+    }
+}

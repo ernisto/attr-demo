@@ -1,0 +1,9 @@
+{
+    "name": "player",
+    "tree": {
+        "$className": "StarterPlayer",
+        "StarterCharacter": {
+            "$path": "../assets/models/starter_character.rbxm"
+        }
+    }
+}

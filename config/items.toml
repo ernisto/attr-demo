@@ -1,0 +1,12 @@
+[sword]
+display = 'Swooord'
+attack = { damage = 5, cooldown = 0.5 }
+
+[axe]
+display = 'Axxxe'
+attack = { damage = 10, cooldown = 1 }
+chop = { efficiency = 3 }
+
+[ore]
+display = 'ore'
+build = {}

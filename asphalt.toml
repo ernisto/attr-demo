@@ -1,0 +1,13 @@
+[creator]
+type = "group"
+id = 0
+
+[codegen]
+strip_extensions = true
+typescript = false
+style = "nested"
+
+[inputs.assets]
+path = "assets/**/*.png"
+output_path = "dist/asphalt"
+bleed = true

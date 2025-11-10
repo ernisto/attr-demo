@@ -1,0 +1,161 @@
+redactions = ["*KEY*", "*TOKEN*", "*SECURITY*"]
+
+[env]
+_.file = ".env"
+
+[tools]
+# for some reason, some tasks sometimes doesnt
+# load their own binary, so im specifying here
+"ubi:johnnymorganz/stylua" = "2.3.0"
+"ubi:jacktabscode/asphalt" = "1.1.0"
+"ubi:1Axen/blink" = "0.18.4"
+
+[tasks]
+"dev:watch_stuffs".run = "mise watch map ::: build:*:dev"
+"dev".run.tasks = ["dev:ensure_opened", "dev:watch_stuffs", "dev:sync_code"]
+
+[tasks."dev:ensure_opened"]
+wait_for = ["build:dev"]
+shell = 'powershell'
+run_windows = "if (-not (Test-Path \"game.rbxl.lock\")) { start game.rbxl }"
+
+# mantle
+[tasks."upload"]
+tools = { "ubi:blake-mealey/mantle" = "0.11.18" }
+depends = ["build:universe"]
+run = "mantle upload"
+env = { MANTLE_OPEN_CLOUD_API_KEY = { required = true } }
+
+# products  TODO: migrate from mantle to a CLI to handle products
+[tasks."upload:products"]
+tools = { "ubi:blake-mealey/mantle" = "0.11.18" }
+sources = ["mantle.yml"]
+outputs = ".mantle-state.yml"
+run = "mantle upload"
+env = { MANTLE_OPEN_CLOUD_API_KEY = { required = true } }
+
+[tasks."build:products:universe"]
+tools = { "ubi:lune-org/lune" = "0.10.4" }
+sources = ["mantle.yml", ".mantle-state.yml"]
+outputs = "dist/mantle/uploads.toml"
+depends = ["upload:products"]
+run = "lune run scripts/uploads_gen.luau"
+
+[tasks."build:products:dev"]
+tools = { "ubi:lune-org/lune" = "0.10.4" }
+run = "lune run scripts/uploads_gen.luau"
+
+# luau
+[tasks.fmt]
+tools = { "ubi:johnnymorganz/stylua" = "2.3.0" }
+sources = ["**/*.luau"]
+run = "stylua ."
+
+[tasks.lint]
+depends = ["map"]
+tools = { "ubi:johnnymorganz/luau-lsp" = "1.54.0" }
+sources = ["**/*.luau"]
+run = """luau-lsp analyze \
+    --platform roblox \
+    --base-luaurc .luaurc \
+    --sourcemap sourcemap.json \
+    --ignore **/dist/** \
+    --ignore **/*_packages/** \
+    client server shared stories"""
+
+# pesde
+[tasks."build:dependencies:universe"]
+tools = { "ubi:pesde-pkg/pesde" = "0.7.1+registry.0.2.3" }
+sources = ["pesde.toml"]
+outputs = "pesde.lock"
+run = "pesde install --prod --locked"
+
+[tasks."build:dependencies:dev"]
+tools = { "ubi:pesde-pkg/pesde" = "0.7.1+registry.0.2.3" }
+sources = ["pesde.toml"]
+outputs = "pesde.lock"
+run = "pesde install"
+
+[tasks."test"]
+tools = { "ubi:pesde-pkg/pesde" = "0.7.1+registry.0.2.3" }
+sources = ["tests/**/*.luau"]
+run = "pesde x ernisto/test"
+
+# rojo
+[tasks."build:universe"]
+tools = { "ubi:rojo-rbx/rojo" = "7.6.0", "ubi:1Axen/blink" = "0.18.4" }
+depends = ["build:*:universe", "fmt"]
+shell = "powershell"
+run = ["mise build:place match", "mise build:place lobby"]
+
+[tasks."build:place"]
+tools = { "ubi:rojo-rbx/rojo" = "7.6.0" }
+depends = ["build:*:universe", "fmt"]
+outputs = "dist/rojo/*.rbxl"
+shell = "powershell"
+usage = """
+    arg "<place>" help="The name used in places/*"
+"""
+run = """
+    mise build:remotes:place {$usage_place?}
+    rojo build places/${usage_place?}/game.project.json -o dist/rojo/{$usage_place?}.rbxl
+"""
+
+[tasks."build:dev"]
+tools = { "ubi:rojo-rbx/rojo" = "7.6.0" }
+depends = ["build:*:dev", "fmt"]
+outputs = "game.rbxl"
+run = "rojo build dev.project.json -o game.rbxl"
+
+[tasks."map"]
+tools = { "ubi:rojo-rbx/rojo" = "7.6.0" }
+depends = ["build:*:dev", "map:**"]
+sources = ["**/*.project.json", "**/*.rbxm", "**/*.luau"]
+outputs = "sourcemap.json"
+run = "rojo sourcemap dev.project.json -o sourcemap.json --include-non-scripts"
+
+[tasks."dev:sync_code"]
+tools = { "ubi:rojo-rbx/rojo" = "7.6.0" }
+wait_for = ["build:*:dev", "fmt"]
+run = "rojo serve dev.project.json"
+
+# asphalt
+[tasks."build:assets:universe"]
+tools = { "ubi:jacktabscode/asphalt" = "1.1.0" }
+wait_for = ["map:assets"]
+sources = ["asphalt.toml", "assets/**"]
+outputs = "dist/asphalt/assets.luau"
+run = "asphalt sync --target cloud"
+env = { ASPHALT_OPEN_CLOUD_API_KEY = { required = true } }
+
+[tasks."build:assets:dev"]
+tools = { "ubi:jacktabscode/asphalt" = "1.1.0" }
+wait_for = ["map:assets"]
+sources = ["asphalt.toml", "assets/**"]
+outputs = "dist/asphalt/assets.luau"
+run = "asphalt sync --target studio"
+
+[tasks."map:assets"]
+tools = { "ubi:jacktabscode/asphalt" = "1.1.0" }
+sources = ["asphalt.toml", "assets/**"]
+outputs = "dist/asphalt/assets.luau"
+run = "asphalt sync --dry-run || true"
+run_windows = "asphalt sync --target studio"     # idk how to ignore errors on windows, but seems fine, since we dont have CI on windows
+
+# blink
+[tasks."build:remotes:place"]
+tools = { "ubi:1Axen/blink" = "0.18.4" }
+sources = ["remotes/**/*.blink", "places/*/remotes/**/*.blink"]
+outputs = "dist/blink/types.luau"
+shell = "powershell"
+usage = """
+    arg "<place>" help="The name used in places/*"
+"""
+run = "blink places/${usage_place?}/game --yes"
+run_windows = """blink "places/$env:usage_place/game" --yes"""
+
+[tasks."build:remotes:dev"]
+tools = { "ubi:1Axen/blink" = "0.18.4" }
+sources = ["remotes/**/*.blink", "places/*/remotes/**/*.blink"]
+outputs = "dist/blink/types.luau"
+run = "blink dev --yes"

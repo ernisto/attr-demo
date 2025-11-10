@@ -1,0 +1,30 @@
+type entity = u32
+type attribute = u32
+type attribute_value = unknown
+type id_source = unknown
+
+event entity_added {
+    from: Server,
+    call: SingleSync,
+    type: Reliable,
+    data: (entity, id_source, map { [attribute]: attribute_value })
+}
+event entity_removed {
+    from: Server,
+    call: SingleSync,
+    type: Reliable,
+    data: entity,
+}
+
+event attribute_changed {
+    from: Server,
+    call: SingleSync,
+    type: Reliable,
+    data: (entity, attribute, attribute_value)
+}
+event attribute_removed {
+    from: Server,
+    call: SingleSync,
+    type: Reliable,
+    data: (entity, attribute, entity?)
+}
